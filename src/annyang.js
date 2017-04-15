@@ -126,10 +126,12 @@
               logMessage('with parameters', parameters);
             }
           }
-          // execute the matched command
-          currentCommand.callback.apply(this, parameters);
-          invokeCallbacks(callbacks.resultMatch, commandText, currentCommand.originalPhrase, results);
-          return;
+          // execute the matched command, treat it as handled if the handler does not return false
+          var commandResult = currentCommand.callback.apply(this, parameters);
+          if(commandResult !== false) {
+            invokeCallbacks(callbacks.resultMatch, commandText, currentCommand.originalPhrase, results);
+            return;
+          }
         }
       }
     }
